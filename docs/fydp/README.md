@@ -6,6 +6,12 @@ The submitted document is:
 deliverables/23FYDP24_SamaanShare_MethodologyBaseline_FYDP1.docx
 ```
 
+A read-only PDF of the same document sits beside it at
+
+```
+deliverables/23FYDP24_SamaanShare_MethodologyBaseline_FYDP1.pdf
+```
+
 It covers Heading 3 (Problem Statement, Objectives and Research Questions) and
 Heading 4 (Proposed Methodology: 4.1 System Architecture, 4.2 Dataset and Data
 Collection Strategy, 4.3 Proposed Algorithm / Core Technique, 4.4 Traceability
@@ -29,22 +35,49 @@ Matrix), with five group reflections, a reference list, and three appendices.
    honestly. Read them once and change anything that is not true of you — an
    examiner can tell when a reflection has been borrowed.
 
+## If the file will not open
+
+The `.docx` in `deliverables/` is a valid Word package — 21 parts, every XML
+part well formed, all element sequences Word enforces checked by
+`validate_ooxml.py`, and openable by `python-docx`. So when "Word cannot open
+this file" appears, the download is the suspect, not the document:
+
+- **Check what was saved.** Some browsers save a `.docx` as
+  `...docx.zip` or append `.crdownload` / `(1)`. The saved file must end in
+  exactly `.docx` and be about 500 KB. A 0-byte or 2 KB file is a failed
+  download, not a corrupt document.
+- **Get it from the branch, not a link that has expired.** The file is
+  committed at `deliverables/` on the branch, and 510 KB is far below any
+  hosting limit.
+- **Open it in the browser first.** Google Docs and Word online open the file
+  directly and will tell you plainly whether the package is sound.
+- **Read the PDF if you only need the text.** The PDF needs no Word at all and
+  is regenerated from the `.docx` by `generator/make_pdf.py`, so it cannot show
+  different words from the submission.
+
+It is not an encoding problem in git either: `.gitattributes` marks `*.docx`
+and the other Office formats `binary`, so a checkout on Windows cannot rewrite
+its line endings.
+
 ## Rebuilding the document
 
 Everything in `generator/` regenerates the Word file from scratch:
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install python-docx matplotlib
+python3 -m venv .venv && .venv/bin/pip install python-docx matplotlib lxml mammoth xhtml2pdf pillow
 cd docs/fydp/generator
 .venv/bin/python make_figures.py     # rewrites architecture.png, deposit_flow.png
 .venv/bin/python build_docx.py       # rewrites the .docx
 .venv/bin/python validate_ooxml.py   # checks element order Word cares about
 .venv/bin/python audit_docx.py       # word counts, table widths, phrasing checks
+.venv/bin/python make_pdf.py         # rewrites the read-only .pdf
 ```
 
 Text lives in `build_docx.py`; layout, styles and table helpers live in
 `docx_kit.py`. Figures are drawn in `make_figures.py` at 300 DPI, above the
-department's 150 DPI minimum.
+department's 150 DPI minimum. `make_pdf.py` reads the finished `.docx` and lays
+it out on A4, so the PDF is a rendering of the submission and never a second
+copy that can drift.
 
 ## What is deliberately in the document
 

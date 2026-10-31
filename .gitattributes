@@ -76,6 +76,12 @@ pnpm-lock.yaml text eol=lf -diff
 *.otf binary
 *.pdf binary
 *.zip binary
+*.docx binary
+*.docm binary
+*.dotx binary
+*.xlsx binary
+*.xlsm binary
+*.pptx binary
 *.tar.gz binary
 *.mp4 binary
 *.webm binary
