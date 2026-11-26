@@ -9,6 +9,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from pptx import Presentation
+from pptx.oxml.ns import qn
 from pptx.util import Inches
 
 import deck_part1 as p1
@@ -152,6 +153,12 @@ def build():
     prs = Presentation()
     prs.slide_width = Inches(13.3333)
     prs.slide_height = Inches(7.5)
+
+    # the default template labels the slide size "screen4x3"; drop the hint so
+    # viewers infer 16:9 from the dimensions instead of the stale type attribute
+    sldSz = prs.part._element.find(qn("p:sldSz"))
+    if sldSz is not None and "type" in sldSz.attrib:
+        del sldSz.attrib["type"]
 
     p1.title_slide(prs)
     p1.agenda(prs)
