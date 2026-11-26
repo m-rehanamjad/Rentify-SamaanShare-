@@ -158,3 +158,6 @@ tmp/
 temp/
 *.tmp
 *.temp
+
+# Generated deck build cache
+fyp-presentation/__pycache__/
